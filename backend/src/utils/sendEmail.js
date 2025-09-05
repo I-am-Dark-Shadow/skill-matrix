@@ -21,7 +21,7 @@ const transporter = nodemailer.createTransport({
 const sendEmail = async (to, subject, html) => {
   try {
     await transporter.sendMail({
-      from: `TeamSync <${process.env.EMAIL_USER}>`,
+      from: `Skill Matrix <${process.env.EMAIL_USER}>`,
       to,
       subject,
       html,

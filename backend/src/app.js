@@ -24,7 +24,7 @@ app.use(cookieParser());
 
 // Health check route
 app.get('/', (req, res) => {
-  res.status(200).json({ message: 'Welcome to TeamSync API!', status: 'OK' });
+  res.status(200).json({ message: 'Welcome to Skill Matrix API!', status: 'OK' });
 });
 
 // API Routes

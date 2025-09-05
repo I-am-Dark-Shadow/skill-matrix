@@ -8,10 +8,10 @@ const PORT = process.env.PORT || 8000;
 connectDB()
   .then(() => {
     app.listen(PORT, () => {
-      console.log(`🚀 Server is running at http://localhost:${PORT}`);
+      console.log(`Server is running at`);
     });
   })
   .catch((err) => {
-    console.error('❌ Failed to connect to the database!', err);
+    console.error('Failed to connect to the database!', err);
     process.exit(1);
   });

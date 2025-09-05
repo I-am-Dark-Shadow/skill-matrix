@@ -23,22 +23,38 @@ export const sendOtpController = async (req, res) => {
 
     // Store the OTP and the full user data temporarily
     await OTP.findOneAndUpdate(
-        { email },
-        { otp, userData: req.body },
-        { upsert: true, new: true, setDefaultsOnInsert: true }
+      { email },
+      { otp, userData: req.body },
+      { upsert: true, new: true, setDefaultsOnInsert: true }
     );
-    
-    const emailHtml = `
-      <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
-        <h2>Welcome to TeamSync!</h2>
-        <p>Your One-Time Password (OTP) for registration is:</p>
-        <p style="font-size: 24px; font-weight: bold; letter-spacing: 2px; color: #1a73e8;">${otp}</p>
-        <p>This OTP is valid for 5 minutes.</p>
-        <p>If you did not request this, please ignore this email.</p>
-      </div>
-    `;
 
-    await sendEmail(email, 'Your OTP for TeamSync Registration', emailHtml);
+    const emailHtml = (otp) => `
+  <div style="background-color: #fdf6e3; padding: 20px; font-family: Arial, sans-serif; color: #4a2c2a;">
+    <div style="max-width: 500px; margin: auto; background: #fff8e7; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); padding: 20px;">
+      
+      <!-- Header -->
+      <div style="text-align: center; margin-bottom: 20px;">
+        <h2 style="color: #8b5e3c; margin: 0;">Welcome to <span style="color:#d97706;">Skill Matrix</span> 🎉</h2>
+        <p style="color: #6b4f3f; margin: 5px 0 0;">Your collaboration journey starts here!</p>
+      </div>
+      
+      <!-- Card Content -->
+      <div style="background: #fff3cd; border: 1px solid #e2c68e; border-radius: 10px; padding: 20px; text-align: center;">
+        <p style="font-size: 16px; margin: 0; color: #4a2c2a;">Here’s your One-Time Password (OTP):</p>
+        <p style="font-size: 28px; font-weight: bold; letter-spacing: 4px; margin: 15px 0; color: #d97706;">${otp}</p>
+        <p style="font-size: 14px; color: #6b4f3f;">This OTP is valid for <strong>5 minutes</strong>.</p>
+      </div>
+
+      <!-- Footer -->
+      <div style="text-align: center; margin-top: 20px; font-size: 13px; color: #7c6f64;">
+        <p>If you did not request this, please ignore this email.</p>
+        <p style="margin-top: 10px;">📧 Sent from <strong>Skill Matrix</strong> <br/> skillmatrix247@gmail.com</p>
+      </div>
+    </div>
+  </div>
+`;
+
+    await sendEmail(email, 'Your OTP for Skill Matrix Registration', emailHtml);
 
     res.status(200).json({ message: 'OTP sent to your email successfully' });
   } catch (error) {
@@ -62,15 +78,15 @@ export const verifyOtpAndRegisterController = async (req, res) => {
     if (!otpData) {
       return res.status(404).json({ message: 'OTP has expired or is invalid. Please try again.' });
     }
-    
+
     // 3. Compare the OTP from the request with the one in the database
     if (otpData.otp !== otp) {
-        return res.status(400).json({ message: 'Invalid OTP.' });
+      return res.status(400).json({ message: 'Invalid OTP.' });
     }
 
     // 4. If OTP is correct, create a new user from the temporarily stored userData
     const newUser = new User(otpData.userData);
-    
+
     // 5. Save the new user to the 'users' collection (password will be hashed automatically by the pre-save hook)
     await newUser.save();
 
@@ -134,13 +150,13 @@ export const loginController = async (req, res) => {
  * @route   POST /api/v1/auth/logout
  */
 export const logoutController = (req, res) => {
-    const options = {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-    };
+  const options = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+  };
 
-    res
-        .status(200)
-        .clearCookie('token', options)
-        .json({ message: 'User logged out successfully' });
+  res
+    .status(200)
+    .clearCookie('token', options)
+    .json({ message: 'User logged out successfully' });
 };
