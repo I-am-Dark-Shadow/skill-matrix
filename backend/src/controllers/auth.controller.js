@@ -54,7 +54,11 @@ export const sendOtpController = async (req, res) => {
   </div>
 `;
 
-    await sendEmail(email, 'Your OTP for Skill Matrix Registration', emailHtml);
+    await sendEmail(
+      email,
+      'Your OTP for Skill Matrix Registration',
+      emailHtml(otp)
+    );
 
     res.status(200).json({ message: 'OTP sent to your email successfully' });
   } catch (error) {
