@@ -48,7 +48,7 @@ export const sendOtpController = async (req, res) => {
       <!-- Footer -->
       <div style="text-align: center; margin-top: 20px; font-size: 13px; color: #7c6f64;">
         <p>If you did not request this, please ignore this email.</p>
-        <p style="margin-top: 10px;">📧 Sent from <strong>Skill Matrix</strong> <br/> skillmatrix247@gmail.com</p>
+        <p style="margin-top: 10px;">Sent from <strong>Skill Matrix</strong> <br/> skillmatrix247@gmail.com</p>
       </div>
     </div>
   </div>
@@ -128,6 +128,7 @@ export const loginController = async (req, res) => {
     const options = {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       expires: new Date(Date.now() + process.env.COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
     };
 
